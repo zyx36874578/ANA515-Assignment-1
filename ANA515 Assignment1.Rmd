@@ -1,0 +1,44 @@
+---
+title: "ANA 515 Assignment 1"
+author: Lunhan Zhang
+date: 2022.9.1
+output: html_document
+theme: bootswatch:"Cerulean"
+---
+
+
+```{r setup, include = FALSE}
+#The include = FALSE function hides both the code and output in my output document
+#You need to install these packages first to be able to use the functions within them. You can install them from the Tools tab or write a new code chunk: install.packages("package_name"). 
+
+library(tidyverse)
+library(knitr)
+library(bslib)
+```
+
+```{r, include = FALSE}
+url <- "https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv"
+gun_deaths <- read_csv(url)
+glimpse(gun_deaths)
+
+youth  <- gun_deaths %>% 
+  filter(age <= 65)
+summary(youth)
+```
+
+We have data about `r nrow(gun_deaths)` individuals killed by guns. Only `r nrow(gun_deaths) - nrow(youth)` are older than 65. The distribution of the remainder is shown below: 
+
+
+```{r youth-dist, echo = FALSE} 
+youth %>% 
+ggplot(aes(age)) + 
+geom_freqpoly(binwidth = 1)
+```
+
+```{r race-dist, echo = FALSE} 
+youth %>% 
+ggplot(aes(fct_infreq(race) %>% fct_rev())) + 
+geom_bar() + coord_flip() + 
+labs(x = "Victim race") 
+```
+
